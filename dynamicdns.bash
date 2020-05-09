@@ -225,7 +225,7 @@ if [ ! -n "$OPTIP" ]; then
 	if [ $VERBOSE = "true" ]; then
 		echo "No IP Address provided, obtaining public IP"
 	fi
-	IP=$(eval "dig -4 +short myip.opendns.com @resolver1.opendns.com")
+	IP=$(eval "dig +short myip.opendns.com @resolver1.opendns.com")
 	if [ $? -ne 0 ]; then
 		logStatus "error" "Failed to obtain current IP address"
 		exit 3
@@ -279,8 +279,7 @@ function listRecord {
     return 1
   fi
 
-  local CLEANED_RECORD=`echo $RECORD | sed "s/[*]/[*]/g ; s/[.]/[.]/g "` 
-  local CURRENT_RECORD=`printf "$LIST_RESP" | grep "\s$CLEANED_RECORD\sA"`
+  local CURRENT_RECORD=`printf "$LIST_RESP" | grep "\s$RECORD\sA"`
 
   if [ $? -ne 0 ]; then
     logStatus "error" "Record not found"
@@ -306,8 +305,7 @@ function deleteRecord {
     return 1
   fi
 
-  local CLEANED_RECORD=`echo $RECORD | sed "s/[*]/[*]/g ; s/[.]/[.]/g "` 
-  local CURRENT_RECORD=`echo $LIST_RESP | egrep -o "\s$CLEANED_RECORD\s+A\s+[0-9]{,3}.[0-9]{,3}.[0-9]{,3}.[0-9]{,3}"`
+  local CURRENT_RECORD=`echo $LIST_RESP | egrep -o "\s$RECORD\s+A\s+[0-9]{,3}.[0-9]{,3}.[0-9]{,3}.[0-9]{,3}"`
   if [ $VERBOSE = "true" ]; then
     echo "Current Record: $CURRENT_RECORD"
   fi
